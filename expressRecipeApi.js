@@ -138,16 +138,19 @@ app.put('/api/updateid', function(req, res){
 
 // Get recipe by ID
 
-app.get('/api/id', function(req, res){
-	let recipeObj = req.body
-	let id = req.body.id
+app.post('/api/id', function(req, res){
+	let recipeObj = req.params
+	// let id = req.body.id
+	let id = req.params.id
+	console.log(id, req.params.id)
 	if(!id || !recipeObj){
 		return res.status(400).send({error: true, message: "Please provide an recipe and recipe Id"})
 	}
 	var sql = "SELECT * FROM recipedb.recipedb WHERE id = ?"
-	con.query(sql, id, function(error, results, fields){
+	con.query(sql, req.params.id, function(error, results, fields){
+		console.log(req, res)
 		if(error) throw error;
-		return res.send({error: false, data: results[0], message: "Recipe object recieved"})
+		return res.send({error: false, data: results, message: "Recipe object recieved"})
 	})
 })
 
